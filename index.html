@@ -6,14 +6,15 @@
     <title>시험 시정표 위젯</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent-color: #38bdf8;
-            --active-color: #22c55e;
-            --prep-color: #eab308;
-            --border-color: #334155;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-color: #2563eb;
+            --active-color: #16a34a;
+            --prep-color: #d97706;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
         * {
@@ -38,15 +39,16 @@
             justify-content: space-between;
             align-items: center;
             background-color: var(--card-bg);
-            padding: 1rem 2rem;
+            padding: 1.2rem 2rem;
             border-radius: 1rem;
             margin-bottom: 1.5rem;
             border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
         }
 
         .header-title {
             font-size: 1.8rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--accent-color);
         }
 
@@ -59,28 +61,23 @@
         select {
             background-color: var(--bg-color);
             color: var(--text-primary);
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
             padding: 0.6rem 1.2rem;
             font-size: 1.2rem;
+            font-weight: 600;
             border-radius: 0.5rem;
             cursor: pointer;
             outline: none;
         }
 
-        .clock {
-            font-size: 1.5rem;
-            font-weight: 600;
-            font-mono: monospace;
-            background: #0f172a;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            border: 1px solid var(--border-color);
+        select:focus {
+            border-color: var(--accent-color);
         }
 
         /* 레이아웃 메인 */
         main {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1.8fr 1.2fr;
             gap: 1.5rem;
             flex: 1;
         }
@@ -95,8 +92,9 @@
         .day-section {
             background-color: var(--card-bg);
             border-radius: 1rem;
-            padding: 1.2rem;
+            padding: 1.2rem 1.5rem;
             border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
         }
 
         .day-title {
@@ -123,41 +121,32 @@
         .period-table th {
             color: var(--text-secondary);
             font-size: 0.95rem;
+            font-weight: 600;
+            background-color: #f1f5f9;
         }
 
         .period-table td {
             font-size: 1.1rem;
         }
 
-        /* 현재 진행 중인 교시 스타일 */
+        /* 현재 진행 중인 교시 강조 스타일 */
         .status-active {
-            background-color: rgba(34, 197, 94, 0.15) !important;
-            border-left: 4px solid var(--active-color);
+            background-color: #f0fdf4 !important;
+            border-left: 5px solid var(--active-color);
         }
 
         .status-prep {
-            background-color: rgba(234, 179, 8, 0.15) !important;
-            border-left: 4px solid var(--prep-color);
+            background-color: #fefce8 !important;
+            border-left: 5px solid var(--prep-color);
         }
 
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.6rem;
-            border-radius: 0.3rem;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .badge-prep { background-color: var(--prep-color); color: #000; }
-        .badge-exam { background-color: var(--active-color); color: #000; }
-        .badge-lunch { background-color: #6366f1; color: #fff; }
-
-        /* 오른쪽: 위젯 전용 대형 상태창 */
-        .widget-panel {
+        /* 오른쪽: 대형 시계 위젯 패널 */
+        .clock-panel {
             background-color: var(--card-bg);
             border-radius: 1rem;
-            padding: 2rem;
+            padding: 2.5rem 2rem;
             border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -165,35 +154,36 @@
             text-align: center;
         }
 
-        .current-status-title {
-            font-size: 1.4rem;
+        .clock-label {
+            font-size: 1.8rem;
+            font-weight: 700;
             color: var(--text-secondary);
             margin-bottom: 1rem;
         }
 
-        .current-subject {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-        }
-
-        .timer-display {
-            font-size: 3.5rem;
+        /* 매우 큰 현재 시간 디스플레이 */
+        .big-clock {
+            font-size: 5rem;
             font-weight: 900;
-            color: var(--accent-color);
-            font-family: monospace;
-            margin-top: 1rem;
+            color: var(--text-primary);
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: -2px;
+            background: #f1f5f9;
+            padding: 1.5rem 2rem;
+            border-radius: 1rem;
+            border: 2px solid var(--border-color);
+            width: 100%;
+            box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.05);
         }
 
         .lunch-info {
-            margin-top: 2rem;
+            margin-top: 2.5rem;
             width: 100%;
-            background-color: var(--bg-color);
-            padding: 1rem;
-            border-radius: 0.5rem;
+            background-color: #f8fafc;
+            padding: 1.2rem;
+            border-radius: 0.8rem;
             border: 1px solid var(--border-color);
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
     </style>
 </head>
@@ -202,13 +192,12 @@
     <header>
         <div class="header-title">2026학년도 1학기 2차 정기시험</div>
         <div class="controls">
-            <label for="gradeSelect" style="font-size: 1.1rem;">학년 선택: </label>
+            <label for="gradeSelect" style="font-size: 1.2rem; font-weight: 700;">학년 선택: </label>
             <select id="gradeSelect" onchange="renderSchedule()">
                 <option value="1">1학년</option>
                 <option value="2">2학년</option>
                 <option value="3" selected>3학년</option>
             </select>
-            <div class="clock" id="clock">00:00:00</div>
         </div>
     </header>
 
@@ -218,15 +207,13 @@
             <!-- 자바스크립트로 자동 생성 -->
         </div>
 
-        <!-- 전자칠판용 대형 현황 위젯 -->
-        <div class="widget-panel">
-            <div class="current-status-title">현재 진행 상태</div>
-            <div class="current-subject" id="widgetSubject">대기 중</div>
-            <div id="widgetBadge"></div>
-            <div class="timer-display" id="widgetTimer">00:00</div>
+        <!-- 우측: 대형 시계 위젯 -->
+        <div class="clock-panel">
+            <div class="clock-label">현재 시간</div>
+            <div class="big-clock" id="bigClock">00:00:00</div>
             <div class="lunch-info" id="lunchInfo">
-                <strong>점심시간 안내</strong>
-                <div id="lunchDetails" style="margin-top: 0.5rem; color: var(--text-secondary);">
+                <strong style="color: var(--accent-color);">점심시간 안내</strong>
+                <div id="lunchDetails" style="margin-top: 0.5rem; color: var(--text-secondary); font-weight: 600;">
                     -
                 </div>
             </div>
@@ -325,8 +312,8 @@
         function updateClock() {
             const now = new Date();
             const timeStr = now.toTimeString().split(' ')[0];
-            document.getElementById('clock').innerText = timeStr;
-            updateWidget(now);
+            document.getElementById('bigClock').innerText = timeStr;
+            checkActivePeriod(now);
         }
 
         function renderSchedule() {
@@ -339,7 +326,7 @@
                     <div class="day-section">
                         <div class="day-title">
                             <span>${day.dayName}</span>
-                            <span style="font-size: 0.9rem; color: var(--text-secondary);">점심시간: ${day.lunch[grade]}</span>
+                            <span style="font-size: 0.95rem; color: var(--text-secondary);">점심시간: ${day.lunch[grade]}</span>
                         </div>
                         <table class="period-table">
                             <thead>
@@ -374,61 +361,33 @@
             });
         }
 
-        function updateWidget(now) {
+        function checkActivePeriod(now) {
             const grade = document.getElementById('gradeSelect').value;
             const currentDateStr = now.toISOString().split('T')[0];
             const currentTimeStr = now.toTimeString().substring(0, 5);
 
             let currentDay = examData.find(d => d.date === currentDateStr);
-            
-            // 시연용 예시: 오늘 날짜에 데이터가 없으면 첫째 날 일정 기준으로 보여줌
-            if (!currentDay) currentDay = examData[0];
+            if (!currentDay) currentDay = examData[0]; // 시연용 기본값 설정
 
             document.getElementById('lunchDetails').innerText = `${grade}학년 점심시간 시작: ${currentDay.lunch[grade]}`;
 
-            let activeFound = false;
+            document.querySelectorAll('.period-table tr').forEach(r => r.classList.remove('status-active', 'status-prep'));
 
             for (let p of currentDay.periods) {
-                const subject = p.subjects[grade];
-                
-                // 준비 시간 체킹
+                // 준비시간 하이라이트
                 if (currentTimeStr >= p.startTime && currentTimeStr < p.prepEndTime) {
-                    setWidgetState(p.period, subject, "준비 시간", "badge-prep", p.prepEndTime, now);
                     highlightRow(currentDay.date, p.period, "status-prep");
-                    activeFound = true;
                     break;
                 } 
-                // 시험 시간 체킹
+                // 시험시간 하이라이트
                 else if (currentTimeStr >= p.prepEndTime && currentTimeStr < p.endTime) {
-                    setWidgetState(p.period, subject, "시험 진행 중", "badge-exam", p.endTime, now);
                     highlightRow(currentDay.date, p.period, "status-active");
-                    activeFound = true;
                     break;
                 }
             }
-
-            if (!activeFound) {
-                document.getElementById('widgetSubject').innerText = "시험 대기 / 종료";
-                document.getElementById('widgetBadge').innerHTML = `<span class="badge" style="background:#475569; color:#fff;">대기</span>`;
-                document.getElementById('widgetTimer').innerText = "--:--";
-            }
-        }
-
-        function setWidgetState(period, subject, statusText, badgeClass, targetTimeStr, now) {
-            document.getElementById('widgetSubject').innerText = `${period} [${subject}]`;
-            document.getElementById('widgetBadge').innerHTML = `<span class="badge ${badgeClass}">${statusText}</span>`;
-
-            // 남은 시간 계산
-            const target = new Date(now.toDateString() + ' ' + targetTimeStr + ':00');
-            const diffSec = Math.max(0, Math.floor((target - now) / 1000));
-            const min = String(Math.floor(diffSec / 60)).padStart(2, '0');
-            const sec = String(diffSec % 60).padStart(2, '0');
-
-            document.getElementById('widgetTimer').innerText = `${min}:${sec}`;
         }
 
         function highlightRow(date, period, className) {
-            document.querySelectorAll('.period-table tr').forEach(r => r.classList.remove('status-active', 'status-prep'));
             const row = document.getElementById(`row-${date}-${period}`);
             if (row) row.classList.add(className);
         }

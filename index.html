@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시험 시정표 위젯</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-color: #38bdf8;
+            --active-color: #22c55e;
+            --prep-color: #eab308;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+
+        /* 상단 헤더 및 컨트롤러 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-bg);
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        select {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1.2rem;
+            font-size: 1.2rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .clock {
+            font-size: 1.5rem;
+            font-weight: 600;
+            font-mono: monospace;
+            background: #0f172a;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        /* 레이아웃 메인 */
+        main {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        /* 왼쪽: 시간표 카드 목록 */
+        .schedule-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .day-section {
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            padding: 1.2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .day-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--accent-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .period-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .period-table th, .period-table td {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .period-table th {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .period-table td {
+            font-size: 1.1rem;
+        }
+
+        /* 현재 진행 중인 교시 스타일 */
+        .status-active {
+            background-color: rgba(34, 197, 94, 0.15) !important;
+            border-left: 4px solid var(--active-color);
+        }
+
+        .status-prep {
+            background-color: rgba(234, 179, 8, 0.15) !important;
+            border-left: 4px solid var(--prep-color);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.3rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-prep { background-color: var(--prep-color); color: #000; }
+        .badge-exam { background-color: var(--active-color); color: #000; }
+        .badge-lunch { background-color: #6366f1; color: #fff; }
+
+        /* 오른쪽: 위젯 전용 대형 상태창 */
+        .widget-panel {
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .current-status-title {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .current-subject {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .timer-display {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--accent-color);
+            font-family: monospace;
+            margin-top: 1rem;
+        }
+
+        .lunch-info {
+            margin-top: 2rem;
+            width: 100%;
+            background-color: var(--bg-color);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">2026학년도 1학기 2차 정기시험</div>
+        <div class="controls">
+            <label for="gradeSelect" style="font-size: 1.1rem;">학년 선택: </label>
+            <select id="gradeSelect" onchange="renderSchedule()">
+                <option value="1">1학년</option>
+                <option value="2">2학년</option>
+                <option value="3" selected>3학년</option>
+            </select>
+            <div class="clock" id="clock">00:00:00</div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 전체 시험 일정 테이블 -->
+        <div class="schedule-container" id="scheduleContainer">
+            <!-- 자바스크립트로 자동 생성 -->
+        </div>
+
+        <!-- 전자칠판용 대형 현황 위젯 -->
+        <div class="widget-panel">
+            <div class="current-status-title">현재 진행 상태</div>
+            <div class="current-subject" id="widgetSubject">대기 중</div>
+            <div id="widgetBadge"></div>
+            <div class="timer-display" id="widgetTimer">00:00</div>
+            <div class="lunch-info" id="lunchInfo">
+                <strong>점심시간 안내</strong>
+                <div id="lunchDetails" style="margin-top: 0.5rem; color: var(--text-secondary);">
+                    -
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // PDF 데이터 기반 시간표 설정
+        const examData = [
+            {
+                date: "2026-07-01",
+                dayName: "7. 1.(수)",
+                lunch: { 1: "11:50", 2: "12:10 (3교시 12:30)", 3: "12:10" },
+                periods: [
+                    {
+                        period: "1교시",
+                        prep: "09:00~09:05",
+                        exam: "09:05~09:50",
+                        startTime: "09:00", endTime: "09:50", prepEndTime: "09:05",
+                        subjects: { 1: "교과융합수업", 2: "한문(11) / 중국어(13)", 3: "수학(04)" }
+                    },
+                    {
+                        period: "2교시",
+                        prep: "10:00~10:05",
+                        exam: "10:05~10:50",
+                        startTime: "10:00", endTime: "10:50", prepEndTime: "10:05",
+                        subjects: { 1: "교과융합수업", 2: "한문(11) / 중국어(13)", 3: "자율" }
+                    },
+                    {
+                        period: "3교시",
+                        prep: "11:00~11:05",
+                        exam: "11:05~11:50",
+                        startTime: "11:00", endTime: "11:50", prepEndTime: "11:05",
+                        subjects: { 1: "-", 2: "-", 3: "기술·가정(06)" }
+                    }
+                ]
+            },
+            {
+                date: "2026-07-02",
+                dayName: "7. 2.(목)",
+                lunch: { 1: "11:50", 2: "12:10", 3: "12:30" },
+                periods: [
+                    {
+                        period: "1교시",
+                        prep: "09:00~09:05",
+                        exam: "09:05~09:50",
+                        startTime: "09:00", endTime: "09:50", prepEndTime: "09:05",
+                        subjects: { 1: "AI 중점학교", 2: "자율 / 사회(03)", 3: "국어(01)" }
+                    },
+                    {
+                        period: "2교시",
+                        prep: "10:00~10:05",
+                        exam: "10:05~10:50",
+                        startTime: "10:00", endTime: "10:50", prepEndTime: "10:05",
+                        subjects: { 1: "운영수업", 2: "사회(03)", 3: "자율" }
+                    },
+                    {
+                        period: "3교시",
+                        prep: "11:00~11:05",
+                        exam: "11:05~11:50",
+                        startTime: "11:00", endTime: "11:50", prepEndTime: "11:05",
+                        subjects: { 1: "-", 2: "-", 3: "역사(16)" }
+                    }
+                ]
+            },
+            {
+                date: "2026-07-03",
+                dayName: "7. 3.(금)",
+                lunch: { 1: "11:50", 2: "12:10", 3: "12:30" },
+                periods: [
+                    {
+                        period: "1교시",
+                        prep: "09:00~09:05",
+                        exam: "09:05~09:50",
+                        startTime: "09:00", endTime: "09:50", prepEndTime: "09:05",
+                        subjects: { 1: "평화공존 교육", 2: "자율 / 도덕(02)", 3: "영어(10)" }
+                    },
+                    {
+                        period: "2교시",
+                        prep: "10:00~10:05",
+                        exam: "10:05~10:50",
+                        startTime: "10:00", endTime: "10:50", prepEndTime: "10:05",
+                        subjects: { 1: "자유학기 주제선택", 2: "도덕(02)", 3: "자율" }
+                    },
+                    {
+                        period: "3교시",
+                        prep: "11:00~11:05",
+                        exam: "11:05~11:50",
+                        startTime: "11:00", endTime: "11:50", prepEndTime: "11:05",
+                        subjects: { 1: "주제선택 (3,4교시)", 2: "-", 3: "과학(05)" }
+                    }
+                ]
+            }
+        ];
+
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0];
+            document.getElementById('clock').innerText = timeStr;
+            updateWidget(now);
+        }
+
+        function renderSchedule() {
+            const grade = document.getElementById('gradeSelect').value;
+            const container = document.getElementById('scheduleContainer');
+            container.innerHTML = '';
+
+            examData.forEach(day => {
+                let html = `
+                    <div class="day-section">
+                        <div class="day-title">
+                            <span>${day.dayName}</span>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">점심시간: ${day.lunch[grade]}</span>
+                        </div>
+                        <table class="period-table">
+                            <thead>
+                                <tr>
+                                    <th>교시</th>
+                                    <th>준비시간</th>
+                                    <th>시험시간</th>
+                                    <th>과목</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                day.periods.forEach(p => {
+                    const subject = p.subjects[grade] || '-';
+                    html += `
+                        <tr id="row-${day.date}-${p.period}">
+                            <td><strong>${p.period}</strong></td>
+                            <td>${p.prep}</td>
+                            <td>${p.exam}</td>
+                            <td><strong>${subject}</strong></td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        function updateWidget(now) {
+            const grade = document.getElementById('gradeSelect').value;
+            const currentDateStr = now.toISOString().split('T')[0];
+            const currentTimeStr = now.toTimeString().substring(0, 5);
+
+            let currentDay = examData.find(d => d.date === currentDateStr);
+            
+            // 시연용 예시: 오늘 날짜에 데이터가 없으면 첫째 날 일정 기준으로 보여줌
+            if (!currentDay) currentDay = examData[0];
+
+            document.getElementById('lunchDetails').innerText = `${grade}학년 점심시간 시작: ${currentDay.lunch[grade]}`;
+
+            let activeFound = false;
+
+            for (let p of currentDay.periods) {
+                const subject = p.subjects[grade];
+                
+                // 준비 시간 체킹
+                if (currentTimeStr >= p.startTime && currentTimeStr < p.prepEndTime) {
+                    setWidgetState(p.period, subject, "준비 시간", "badge-prep", p.prepEndTime, now);
+                    highlightRow(currentDay.date, p.period, "status-prep");
+                    activeFound = true;
+                    break;
+                } 
+                // 시험 시간 체킹
+                else if (currentTimeStr >= p.prepEndTime && currentTimeStr < p.endTime) {
+                    setWidgetState(p.period, subject, "시험 진행 중", "badge-exam", p.endTime, now);
+                    highlightRow(currentDay.date, p.period, "status-active");
+                    activeFound = true;
+                    break;
+                }
+            }
+
+            if (!activeFound) {
+                document.getElementById('widgetSubject').innerText = "시험 대기 / 종료";
+                document.getElementById('widgetBadge').innerHTML = `<span class="badge" style="background:#475569; color:#fff;">대기</span>`;
+                document.getElementById('widgetTimer').innerText = "--:--";
+            }
+        }
+
+        function setWidgetState(period, subject, statusText, badgeClass, targetTimeStr, now) {
+            document.getElementById('widgetSubject').innerText = `${period} [${subject}]`;
+            document.getElementById('widgetBadge').innerHTML = `<span class="badge ${badgeClass}">${statusText}</span>`;
+
+            // 남은 시간 계산
+            const target = new Date(now.toDateString() + ' ' + targetTimeStr + ':00');
+            const diffSec = Math.max(0, Math.floor((target - now) / 1000));
+            const min = String(Math.floor(diffSec / 60)).padStart(2, '0');
+            const sec = String(diffSec % 60).padStart(2, '0');
+
+            document.getElementById('widgetTimer').innerText = `${min}:${sec}`;
+        }
+
+        function highlightRow(date, period, className) {
+            document.querySelectorAll('.period-table tr').forEach(r => r.classList.remove('status-active', 'status-prep'));
+            const row = document.getElementById(`row-${date}-${period}`);
+            if (row) row.classList.add(className);
+        }
+
+        // 초기화
+        renderSchedule();
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>

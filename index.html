@@ -13,8 +13,8 @@
             --accent-color: #2563eb;
             --active-color: #16a34a;
             --prep-color: #d97706;
-            --border-color: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --border-color: #cbd5e1;
+            --shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
         * {
@@ -54,8 +54,19 @@
 
         .controls {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
             align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-group label {
+            font-size: 1.2rem;
+            font-weight: 700;
         }
 
         select {
@@ -77,34 +88,70 @@
         /* 레이아웃 메인 */
         main {
             display: grid;
-            grid-template-columns: 1.8fr 1.2fr;
+            grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
             flex: 1;
         }
 
-        /* 왼쪽: 시간표 카드 목록 */
+        /* 왼쪽: 시간표 및 탭 영역 */
         .schedule-container {
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
 
-        .day-section {
+        /* 교시 선택 탭 */
+        .period-tabs {
+            display: flex;
+            gap: 0.5rem;
             background-color: var(--card-bg);
-            border-radius: 1rem;
-            padding: 1.2rem 1.5rem;
+            padding: 0.5rem;
+            border-radius: 0.8rem;
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
         }
 
-        .day-title {
-            font-size: 1.3rem;
+        .tab-btn {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 0.8rem;
+            border: none;
+            background-color: transparent;
+            color: var(--text-secondary);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: #f1f5f9;
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent-color);
+            color: #ffffff;
+        }
+
+        .day-section {
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            flex: 1;
+        }
+
+        .day-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
             color: var(--accent-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 0.8rem;
         }
 
         .period-table {
@@ -113,38 +160,38 @@
         }
 
         .period-table th, .period-table td {
-            padding: 0.8rem 1rem;
+            padding: 1.2rem 1rem;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
 
         .period-table th {
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            font-weight: 600;
+            font-size: 1.1rem;
+            font-weight: 700;
             background-color: #f1f5f9;
         }
 
         .period-table td {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
         }
 
         /* 현재 진행 중인 교시 강조 스타일 */
         .status-active {
             background-color: #f0fdf4 !important;
-            border-left: 5px solid var(--active-color);
+            border-left: 6px solid var(--active-color);
         }
 
         .status-prep {
             background-color: #fefce8 !important;
-            border-left: 5px solid var(--prep-color);
+            border-left: 6px solid var(--prep-color);
         }
 
         /* 오른쪽: 대형 시계 위젯 패널 */
         .clock-panel {
             background-color: var(--card-bg);
             border-radius: 1rem;
-            padding: 2.5rem 2rem;
+            padding: 2.5rem 1.5rem;
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
             display: flex;
@@ -155,35 +202,37 @@
         }
 
         .clock-label {
-            font-size: 1.8rem;
-            font-weight: 700;
+            font-size: 2.2rem;
+            font-weight: 800;
             color: var(--text-secondary);
             margin-bottom: 1rem;
         }
 
-        /* 매우 큰 현재 시간 디스플레이 */
+        /* 2배 확대된 현재 시간 디스플레이 (기존 5rem -> 10rem) */
         .big-clock {
-            font-size: 5rem;
+            font-size: 10rem;
             font-weight: 900;
             color: var(--text-primary);
             font-family: 'Courier New', Courier, monospace;
-            letter-spacing: -2px;
+            letter-spacing: -4px;
+            line-height: 1.0;
             background: #f1f5f9;
-            padding: 1.5rem 2rem;
-            border-radius: 1rem;
-            border: 2px solid var(--border-color);
+            padding: 2rem 1rem;
+            border-radius: 1.2rem;
+            border: 3px solid var(--border-color);
             width: 100%;
-            box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.05);
+            box-shadow: inset 0 2px 6px 0 rgba(0,0,0,0.08);
+            margin: 0.5rem 0;
         }
 
         .lunch-info {
-            margin-top: 2.5rem;
+            margin-top: 2rem;
             width: 100%;
             background-color: #f8fafc;
             padding: 1.2rem;
             border-radius: 0.8rem;
             border: 1px solid var(--border-color);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
     </style>
 </head>
@@ -192,28 +241,49 @@
     <header>
         <div class="header-title">2026학년도 1학기 2차 정기시험</div>
         <div class="controls">
-            <label for="gradeSelect" style="font-size: 1.2rem; font-weight: 700;">학년 선택: </label>
-            <select id="gradeSelect" onchange="renderSchedule()">
-                <option value="1">1학년</option>
-                <option value="2">2학년</option>
-                <option value="3" selected>3학년</option>
-            </select>
+            <div class="control-group">
+                <label for="daySelect">시험일:</label>
+                <select id="daySelect" onchange="renderSchedule()">
+                    <option value="2026-07-01">1일차 (7. 1. 수)</option>
+                    <option value="2026-07-02">2일차 (7. 2. 목)</option>
+                    <option value="2026-07-03">3일차 (7. 3. 금)</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="gradeSelect">학년:</label>
+                <select id="gradeSelect" onchange="renderSchedule()">
+                    <option value="1">1학년</option>
+                    <option value="2">2학년</option>
+                    <option value="3" selected>3학년</option>
+                </select>
+            </div>
         </div>
     </header>
 
     <main>
-        <!-- 전체 시험 일정 테이블 -->
-        <div class="schedule-container" id="scheduleContainer">
-            <!-- 자바스크립트로 자동 생성 -->
+        <!-- 왼쪽: 시험 일정 테이블 및 교시 필터 -->
+        <div class="schedule-container">
+            <!-- 교시 선택 탭 -->
+            <div class="period-tabs">
+                <button class="tab-btn active" onclick="setPeriodFilter('all', this)">전체 교시</button>
+                <button class="tab-btn" onclick="setPeriodFilter('1교시', this)">1교시</button>
+                <button class="tab-btn" onclick="setPeriodFilter('2교시', this)">2교시</button>
+                <button class="tab-btn" onclick="setPeriodFilter('3교시', this)">3교시</button>
+            </div>
+
+            <!-- 특정 일자 시험 일정 카드 -->
+            <div id="scheduleContainer">
+                <!-- 자바스크립트로 자동 생성 -->
+            </div>
         </div>
 
-        <!-- 우측: 대형 시계 위젯 -->
+        <!-- 우측: 대형 시계 위젯 (2배 확대) -->
         <div class="clock-panel">
             <div class="clock-label">현재 시간</div>
             <div class="big-clock" id="bigClock">00:00:00</div>
             <div class="lunch-info" id="lunchInfo">
                 <strong style="color: var(--accent-color);">점심시간 안내</strong>
-                <div id="lunchDetails" style="margin-top: 0.5rem; color: var(--text-secondary); font-weight: 600;">
+                <div id="lunchDetails" style="margin-top: 0.5rem; color: var(--text-secondary); font-weight: 700;">
                     -
                 </div>
             </div>
@@ -309,6 +379,26 @@
             }
         ];
 
+        let selectedPeriodFilter = 'all';
+
+        function initDateSelect() {
+            const now = new Date();
+            const todayStr = now.toISOString().split('T')[0];
+            const daySelect = document.getElementById('daySelect');
+            
+            // 오늘 날짜가 시험 일정에 포함되어 있다면 해당 일자로 초기 선택
+            if (examData.some(d => d.date === todayStr)) {
+                daySelect.value = todayStr;
+            }
+        }
+
+        function setPeriodFilter(period, btn) {
+            selectedPeriodFilter = period;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderSchedule();
+        }
+
         function updateClock() {
             const now = new Date();
             const timeStr = now.toTimeString().split(' ')[0];
@@ -318,71 +408,83 @@
 
         function renderSchedule() {
             const grade = document.getElementById('gradeSelect').value;
+            const selectedDate = document.getElementById('daySelect').value;
             const container = document.getElementById('scheduleContainer');
-            container.innerHTML = '';
+            
+            const currentDay = examData.find(d => d.date === selectedDate) || examData[0];
 
-            examData.forEach(day => {
-                let html = `
-                    <div class="day-section">
-                        <div class="day-title">
-                            <span>${day.dayName}</span>
-                            <span style="font-size: 0.95rem; color: var(--text-secondary);">점심시간: ${day.lunch[grade]}</span>
-                        </div>
-                        <table class="period-table">
-                            <thead>
-                                <tr>
-                                    <th>교시</th>
-                                    <th>준비시간</th>
-                                    <th>시험시간</th>
-                                    <th>과목</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                `;
-
-                day.periods.forEach(p => {
-                    const subject = p.subjects[grade] || '-';
-                    html += `
-                        <tr id="row-${day.date}-${p.period}">
-                            <td><strong>${p.period}</strong></td>
-                            <td>${p.prep}</td>
-                            <td>${p.exam}</td>
-                            <td><strong>${subject}</strong></td>
-                        </tr>
-                    `;
-                });
-
-                html += `
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-                container.innerHTML += html;
+            // 교시 필터 적용
+            const filteredPeriods = currentDay.periods.filter(p => {
+                if (selectedPeriodFilter === 'all') return true;
+                return p.period === selectedPeriodFilter;
             });
+
+            let html = `
+                <div class="day-section">
+                    <div class="day-title">
+                        <span>${currentDay.dayName} 시험 일정</span>
+                        <span style="font-size: 1.05rem; color: var(--text-secondary);">점심시간: ${currentDay.lunch[grade]}</span>
+                    </div>
+                    <table class="period-table">
+                        <thead>
+                            <tr>
+                                <th>교시</th>
+                                <th>준비시간</th>
+                                <th>시험시간</th>
+                                <th>과목</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            filteredPeriods.forEach(p => {
+                const subject = p.subjects[grade] || '-';
+                html += `
+                    <tr id="row-${currentDay.date}-${p.period}">
+                        <td><strong>${p.period}</strong></td>
+                        <td>${p.prep}</td>
+                        <td>${p.exam}</td>
+                        <td><strong>${subject}</strong></td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            
+            // 시간 표시 및 하이라이트 갱신
+            checkActivePeriod(new Date());
         }
 
         function checkActivePeriod(now) {
             const grade = document.getElementById('gradeSelect').value;
-            const currentDateStr = now.toISOString().split('T')[0];
+            const selectedDate = document.getElementById('daySelect').value;
             const currentTimeStr = now.toTimeString().substring(0, 5);
 
-            let currentDay = examData.find(d => d.date === currentDateStr);
-            if (!currentDay) currentDay = examData[0]; // 시연용 기본값 설정
-
-            document.getElementById('lunchDetails').innerText = `${grade}학년 점심시간 시작: ${currentDay.lunch[grade]}`;
+            const currentDay = examData.find(d => d.date === selectedDate);
+            if (currentDay) {
+                document.getElementById('lunchDetails').innerText = `${grade}학년 점심시간 시작: ${currentDay.lunch[grade]}`;
+            }
 
             document.querySelectorAll('.period-table tr').forEach(r => r.classList.remove('status-active', 'status-prep'));
 
-            for (let p of currentDay.periods) {
-                // 준비시간 하이라이트
-                if (currentTimeStr >= p.startTime && currentTimeStr < p.prepEndTime) {
-                    highlightRow(currentDay.date, p.period, "status-prep");
-                    break;
-                } 
-                // 시험시간 하이라이트
-                else if (currentTimeStr >= p.prepEndTime && currentTimeStr < p.endTime) {
-                    highlightRow(currentDay.date, p.period, "status-active");
-                    break;
+            if (currentDay) {
+                for (let p of currentDay.periods) {
+                    // 준비시간 하이라이트
+                    if (currentTimeStr >= p.startTime && currentTimeStr < p.prepEndTime) {
+                        highlightRow(currentDay.date, p.period, "status-prep");
+                        break;
+                    } 
+                    // 시험시간 하이라이트
+                    else if (currentTimeStr >= p.prepEndTime && currentTimeStr < p.endTime) {
+                        highlightRow(currentDay.date, p.period, "status-active");
+                        break;
+                    }
                 }
             }
         }
@@ -393,6 +495,7 @@
         }
 
         // 초기화
+        initDateSelect();
         renderSchedule();
         setInterval(updateClock, 1000);
         updateClock();

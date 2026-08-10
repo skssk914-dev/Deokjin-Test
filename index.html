@@ -475,11 +475,22 @@
             if (row) row.classList.add(className);
         }
 
+       // 밀리초 보정 시계 시작 함수
+        function startPreciseClock() {
+            updateClock();
+            const now = new Date();
+            // 다음 1초 정각(000ms)에 맞춰 타이머 동작 시작
+            const delay = 1000 - now.getMilliseconds();
+            setTimeout(() => {
+                updateClock();
+                setInterval(updateClock, 1000);
+            }, delay);
+        }
+
         // 초기화
         initDateSelect();
         renderSchedule();
-        setInterval(updateClock, 1000);
-        updateClock();
+        startPreciseClock(); // 보정된 시계 실행
     </script>
 </body>
 </html>

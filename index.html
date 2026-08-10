@@ -205,10 +205,10 @@
             font-size: 2.2rem;
             font-weight: 800;
             color: var(--text-secondary);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
-        /* 2배 확대된 현재 시간 디스플레이 (기존 5rem -> 10rem) */
+        /* 2배 확대된 현재 시간 디스플레이 */
         .big-clock {
             font-size: 10rem;
             font-weight: 900;
@@ -217,22 +217,11 @@
             letter-spacing: -4px;
             line-height: 1.0;
             background: #f1f5f9;
-            padding: 2rem 1rem;
+            padding: 2.5rem 1rem;
             border-radius: 1.2rem;
             border: 3px solid var(--border-color);
             width: 100%;
             box-shadow: inset 0 2px 6px 0 rgba(0,0,0,0.08);
-            margin: 0.5rem 0;
-        }
-
-        .lunch-info {
-            margin-top: 2rem;
-            width: 100%;
-            background-color: #f8fafc;
-            padding: 1.2rem;
-            border-radius: 0.8rem;
-            border: 1px solid var(--border-color);
-            font-size: 1.2rem;
         }
     </style>
 </head>
@@ -277,16 +266,10 @@
             </div>
         </div>
 
-        <!-- 우측: 대형 시계 위젯 (2배 확대) -->
+        <!-- 우측: 대형 시계 위젯 -->
         <div class="clock-panel">
             <div class="clock-label">현재 시간</div>
             <div class="big-clock" id="bigClock">00:00:00</div>
-            <div class="lunch-info" id="lunchInfo">
-                <strong style="color: var(--accent-color);">점심시간 안내</strong>
-                <div id="lunchDetails" style="margin-top: 0.5rem; color: var(--text-secondary); font-weight: 700;">
-                    -
-                </div>
-            </div>
         </div>
     </main>
 
@@ -296,7 +279,6 @@
             {
                 date: "2026-10-06",
                 dayName: "10. 6.(화)",
-                lunch: { 1: "11:50", 2: "12:10 (3교시 12:30)", 3: "12:10" },
                 periods: [
                     {
                         period: "1교시",
@@ -324,7 +306,6 @@
             {
                 date: "2026-10-07",
                 dayName: "10. 7.(수)",
-                lunch: { 1: "11:50", 2: "12:10", 3: "12:30" },
                 periods: [
                     {
                         period: "1교시",
@@ -352,7 +333,6 @@
             {
                 date: "2026-10-08",
                 dayName: "10. 8.(목)",
-                lunch: { 1: "11:50", 2: "12:10", 3: "12:30" },
                 periods: [
                     {
                         period: "1교시",
@@ -423,7 +403,6 @@
                 <div class="day-section">
                     <div class="day-title">
                         <span>${currentDay.dayName} 시험 일정</span>
-                        <span style="font-size: 1.05rem; color: var(--text-secondary);">점심시간: ${currentDay.lunch[grade]}</span>
                     </div>
                     <table class="period-table">
                         <thead>
@@ -462,14 +441,10 @@
         }
 
         function checkActivePeriod(now) {
-            const grade = document.getElementById('gradeSelect').value;
             const selectedDate = document.getElementById('daySelect').value;
             const currentTimeStr = now.toTimeString().substring(0, 5);
 
             const currentDay = examData.find(d => d.date === selectedDate);
-            if (currentDay) {
-                document.getElementById('lunchDetails').innerText = `${grade}학년 점심시간 시작: ${currentDay.lunch[grade]}`;
-            }
 
             document.querySelectorAll('.period-table tr').forEach(r => r.classList.remove('status-active', 'status-prep'));
 

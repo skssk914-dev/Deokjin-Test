@@ -239,14 +239,14 @@
 <body>
 
     <header>
-        <div class="header-title">2026학년도 1학기 2차 정기시험</div>
+        <div class="header-title">2026학년도 2학기 1차 정기시험</div>
         <div class="controls">
             <div class="control-group">
                 <label for="daySelect">시험일:</label>
                 <select id="daySelect" onchange="renderSchedule()">
-                    <option value="2026-07-01">1일차 (7. 1. 수)</option>
-                    <option value="2026-07-02">2일차 (7. 2. 목)</option>
-                    <option value="2026-07-03">3일차 (7. 3. 금)</option>
+                    <option value="2026-10-06">1일차 (10. 6. 화)</option>
+                    <option value="2026-10-07">2일차 (10. 7. 수)</option>
+                    <option value="2026-10-08">3일차 (10. 8. 목)</option>
                 </select>
             </div>
             <div class="control-group">
@@ -294,8 +294,8 @@
         // PDF 데이터 기반 시간표 설정
         const examData = [
             {
-                date: "2026-07-01",
-                dayName: "7. 1.(수)",
+                date: "2026-10-06",
+                dayName: "10. 6.(화)",
                 lunch: { 1: "11:50", 2: "12:10 (3교시 12:30)", 3: "12:10" },
                 periods: [
                     {
@@ -322,8 +322,8 @@
                 ]
             },
             {
-                date: "2026-07-02",
-                dayName: "7. 2.(목)",
+                date: "2026-10-07",
+                dayName: "10. 7.(수)",
                 lunch: { 1: "11:50", 2: "12:10", 3: "12:30" },
                 periods: [
                     {
@@ -350,8 +350,8 @@
                 ]
             },
             {
-                date: "2026-07-03",
-                dayName: "7. 3.(금)",
+                date: "2026-10-08",
+                dayName: "10. 8.(목)",
                 lunch: { 1: "11:50", 2: "12:10", 3: "12:30" },
                 periods: [
                     {
